@@ -13,7 +13,7 @@ export default function TopBooks() {
   ];
 
   return (
-    <div className="container mx-auto mt-12">
+    <div className="container mx-auto my-12">
       <p className="text-center text-xl font-semibold underline text-cyan-600 underline-offset-8 uppercase">
         Here are the latest top books
       </p>

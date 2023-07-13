@@ -85,6 +85,21 @@ export default function Navbar() {
                 <span>Home</span>
               </NavLink>
             </li>
+
+            <li role="none" className="flex items-stretch">
+              <NavLink
+                to="/allbooks"
+                style={
+                  isActiveNavLink("/allbooks") ? activeNavLinkStyle : undefined
+                }
+                role="menuitem"
+                aria-haspopup="false"
+                className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
+              >
+                <span>All Books</span>
+              </NavLink>
+            </li>
+
             <li role="none" className="flex items-stretch">
               <NavLink
                 to="/login"
