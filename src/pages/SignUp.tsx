@@ -243,6 +243,7 @@ export default function SignUp() {
                         name="username"
                         className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-cyan-500"
                         placeholder="Enter Username"
+                        required
                       />
                     </div>
                   </div>
@@ -261,6 +262,7 @@ export default function SignUp() {
                         name="password"
                         className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-cyan-500"
                         placeholder="************"
+                        required
                       />
                     </div>
                   </div>
