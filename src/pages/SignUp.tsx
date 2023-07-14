@@ -1,16 +1,38 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import { toast } from "react-hot-toast";
 import "../styles/autofill.css";
+import { useCreateUserMutation } from "../redux/api/apiSlice";
 export default function SignUp() {
+  const [createUser, { isLoading }] = useCreateUserMutation();
+
+  console.log(isLoading);
+
   const handleRegister = (e: { preventDefault: () => void; target: any }) => {
     e.preventDefault();
 
     const form = e.target;
-    const username = form.username.value;
+    const email = form.email.value;
     const password = form.password.value;
 
-    console.log({ username, password });
+    if (password.length < 6) {
+      return toast.error("Please Enter Six Character");
+    }
+
+    const option = {
+      email,
+      password,
+    };
+
+    createUser(option);
+    form.reset();
+
+    toast.success("User Created Successfully");
+
+    // console.log({ email, password });
   };
 
   return (
@@ -232,17 +254,17 @@ export default function SignUp() {
                 <div className="flex -mx-3">
                   <div className="w-full px-3 mb-5">
                     <label htmlFor="" className="text-xs font-semibold px-1">
-                      Username
+                      Email
                     </label>
                     <div className="flex">
                       <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
                         <i className="mdi mdi-email-outline text-gray-400 text-lg"></i>
                       </div>
                       <input
-                        type="text"
-                        name="username"
+                        type="email"
+                        name="email"
                         className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-cyan-500"
-                        placeholder="Enter Username"
+                        placeholder="Enter Email"
                         required
                       />
                     </div>
