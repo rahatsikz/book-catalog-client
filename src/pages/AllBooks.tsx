@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -6,7 +7,6 @@
 import TableRow from "../components/TableRow";
 import { useGetAllBooksQuery } from "../redux/api/apiSlice";
 import { IBook } from "../types/IBook";
-import { FormEvent } from "react";
 import { useState, useEffect } from "react";
 
 export default function AllBooks() {
@@ -19,16 +19,20 @@ export default function AllBooks() {
 
   const [search, setSearch] = useState("");
   const [year, setYear] = useState("");
+  const [genre, setGenre] = useState("");
 
   useEffect(() => {
     setFilteredData(data?.data);
   }, [data?.data]);
 
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+  const handleSearch = (e: {
+    preventDefault: () => void;
+    currentTarget: any;
+  }) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const search = (form.search as HTMLInputElement).value;
-    // console.log({ search });
+
+    const search = e.currentTarget.value;
+    console.log({ search });
     setSearch(search);
   };
 
@@ -43,7 +47,31 @@ export default function AllBooks() {
     setYear(year);
   };
 
-  if (search.length && year.length) {
+  const handleGenre = (e: {
+    preventDefault: () => void;
+    currentTarget: any;
+  }) => {
+    e.preventDefault();
+
+    const genre = e.currentTarget.value;
+    console.log({ genre });
+    setGenre(genre);
+  };
+
+  const genres = data?.data.map((indivBook: IBook) => indivBook.genre);
+
+  if (search.length && year.length && genre.length) {
+    filteredData = data?.data.filter(
+      (indivBook: IBook) =>
+        (indivBook.title.toLowerCase().includes(search.toLowerCase()) ||
+          indivBook.author.toLowerCase().includes(search.toLowerCase()) ||
+          indivBook.genre.toLowerCase().includes(search.toLowerCase())) &&
+        parseInt(indivBook.publicationDate.slice(-4)) < parseInt(year) &&
+        (genre !== "All"
+          ? indivBook.genre.includes(genre)
+          : genres.includes(indivBook.genre))
+    );
+  } else if (search.length && year.length) {
     filteredData = data?.data.filter(
       (indivBook: IBook) =>
         (indivBook.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -51,7 +79,24 @@ export default function AllBooks() {
           indivBook.genre.toLowerCase().includes(search.toLowerCase())) &&
         parseInt(indivBook.publicationDate.slice(-4)) < parseInt(year)
     );
-    // console.log(filteredData);
+  } else if (search.length && genre.length) {
+    filteredData = data?.data.filter(
+      (indivBook: IBook) =>
+        (indivBook.title.toLowerCase().includes(search.toLowerCase()) ||
+          indivBook.author.toLowerCase().includes(search.toLowerCase()) ||
+          indivBook.genre.toLowerCase().includes(search.toLowerCase())) &&
+        (genre !== "All"
+          ? indivBook.genre.includes(genre)
+          : genres.includes(indivBook.genre))
+    );
+  } else if (year.length && genre.length) {
+    filteredData = data?.data.filter(
+      (indivBook: IBook) =>
+        parseInt(indivBook.publicationDate.slice(-4)) < parseInt(year) &&
+        (genre !== "All"
+          ? indivBook.genre.includes(genre)
+          : genres.includes(indivBook.genre))
+    );
   } else if (search.length) {
     filteredData = data?.data.filter(
       (indivBook: IBook) =>
@@ -64,6 +109,14 @@ export default function AllBooks() {
       (indivBook: IBook) =>
         parseInt(indivBook.publicationDate.slice(-4)) < parseInt(year)
     );
+  } else if (genre.length) {
+    if (genre === "All") {
+      filteredData = data?.data;
+    } else {
+      filteredData = data?.data.filter(
+        (indivBook: IBook) => indivBook.genre === genre
+      );
+    }
   }
 
   console.log({ filteredData });
@@ -77,13 +130,14 @@ export default function AllBooks() {
       </p>
 
       <div className="mt-8">
-        <form onSubmit={handleSearch} className="grid grid-cols-3 gap-8">
+        <form className="w-9/12 mx-auto grid 2xl:grid-cols-3 lg:grid-cols-2 gap-8">
           <div className="form-control">
             <div className="input-group">
               <input
                 type="text"
                 name="search"
-                placeholder="Search…"
+                onChange={handleSearch}
+                placeholder="name, author or genre"
                 className="input input-bordered focus:outline-none"
               />
               <button type="submit" className="btn btn-square">
@@ -118,6 +172,23 @@ export default function AllBooks() {
                 <option value={1900}>1900</option>
                 <option value={1850}>1850</option>
                 <option value={1800}>1800</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="form-control">
+            <label className="input-group">
+              <span>Genre</span>
+              <select
+                onChange={handleGenre}
+                name="year"
+                className="select select-bordered focus:outline-none"
+              >
+                <option defaultValue="All">All</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Romance">Romance</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Dystopian">Dystopian</option>
               </select>
             </label>
           </div>
