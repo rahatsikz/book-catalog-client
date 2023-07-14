@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -12,9 +13,12 @@ export default function AllBooks() {
   const { data, isLoading } = useGetAllBooksQuery(undefined);
   console.log(isLoading);
 
-  const [filteredData, setFilteredData] = useState<IBook[] | undefined>(
+  let [filteredData, setFilteredData] = useState<IBook[] | undefined>(
     data?.data
   );
+
+  const [search, setSearch] = useState("");
+  const [year, setYear] = useState("");
 
   useEffect(() => {
     setFilteredData(data?.data);
@@ -25,19 +29,46 @@ export default function AllBooks() {
     const form = e.currentTarget;
     const search = (form.search as HTMLInputElement).value;
     // console.log({ search });
-    if (search.length) {
-      const filteredData = data?.data.filter(
-        (indivBook: IBook) =>
-          indivBook.title.toLowerCase().includes(search.toLowerCase()) ||
-          indivBook.author.toLowerCase().includes(search.toLowerCase()) ||
-          indivBook.genre.toLowerCase().includes(search.toLowerCase())
-      );
-      setFilteredData(filteredData);
-      // console.log(filteredData);
-    } else {
-      setFilteredData(data?.data);
-    }
+    setSearch(search);
   };
+
+  const handleYear = (e: {
+    preventDefault: () => void;
+    currentTarget: any;
+  }) => {
+    e.preventDefault();
+
+    const year = e.currentTarget.value;
+    console.log({ year });
+    setYear(year);
+  };
+
+  if (search.length && year.length) {
+    filteredData = data?.data.filter(
+      (indivBook: IBook) =>
+        (indivBook.title.toLowerCase().includes(search.toLowerCase()) ||
+          indivBook.author.toLowerCase().includes(search.toLowerCase()) ||
+          indivBook.genre.toLowerCase().includes(search.toLowerCase())) &&
+        parseInt(indivBook.publicationDate.slice(-4)) < parseInt(year)
+    );
+    // console.log(filteredData);
+  } else if (search.length) {
+    filteredData = data?.data.filter(
+      (indivBook: IBook) =>
+        indivBook.title.toLowerCase().includes(search.toLowerCase()) ||
+        indivBook.author.toLowerCase().includes(search.toLowerCase()) ||
+        indivBook.genre.toLowerCase().includes(search.toLowerCase())
+    );
+  } else if (year.length) {
+    filteredData = data?.data.filter(
+      (indivBook: IBook) =>
+        parseInt(indivBook.publicationDate.slice(-4)) < parseInt(year)
+    );
+  }
+
+  console.log({ filteredData });
+
+  // setFilteredData(filteredData);
 
   return (
     <div className="w-8/12 mx-auto mt-12">
@@ -46,7 +77,7 @@ export default function AllBooks() {
       </p>
 
       <div className="mt-8">
-        <form onSubmit={handleSearch}>
+        <form onSubmit={handleSearch} className="grid grid-cols-3 gap-8">
           <div className="form-control">
             <div className="input-group">
               <input
@@ -72,6 +103,23 @@ export default function AllBooks() {
                 </svg>
               </button>
             </div>
+          </div>
+
+          <div className="form-control">
+            <label className="input-group">
+              <span>Publication Year upto</span>
+              <select
+                onChange={handleYear}
+                name="year"
+                className="select select-bordered focus:outline-none"
+              >
+                <option defaultValue={2023}>2023</option>
+                <option value={1950}>1950</option>
+                <option value={1900}>1900</option>
+                <option value={1850}>1850</option>
+                <option value={1800}>1800</option>
+              </select>
+            </label>
           </div>
         </form>
       </div>
