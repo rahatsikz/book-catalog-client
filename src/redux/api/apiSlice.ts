@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -25,11 +26,22 @@ export const api = createApi({
     getLatestBooks: builder.query({
       query: () => "/books/latest",
     }),
+    getSingleBook: builder.query({
+      query: (id) => `/books/${id}`,
+    }),
     addBook: builder.mutation({
       query: (bookInfo) => ({
         url: "/books/addbook",
         method: "POST",
         body: bookInfo,
+      }),
+    }),
+
+    addComment: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/books/${id}`,
+        method: "POST",
+        body: data,
       }),
     }),
   }),
@@ -41,4 +53,6 @@ export const {
   useGetAllBooksQuery,
   useAddBookMutation,
   useGetLatestBooksQuery,
+  useGetSingleBookQuery,
+  useAddCommentMutation,
 } = api;
