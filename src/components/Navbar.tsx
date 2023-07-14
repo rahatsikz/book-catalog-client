@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { NavLink, useLocation, Link } from "react-router-dom";
 import logo from "../assets/Vector_Book_blue.svg.png";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setUser } from "../redux/features/user/userSlice";
 
 export default function Navbar() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
 
   const { user } = useAppSelector((state) => state.user);
   const localuser = localStorage.getItem("user");
+  const dispatch = useAppDispatch();
 
   console.log(user);
 
@@ -21,6 +23,11 @@ export default function Navbar() {
   // Apply custom styles to the active NavLink
   const activeNavLinkStyle = {
     color: "#06B6D4",
+  };
+
+  const handleLogOut = () => {
+    dispatch(setUser(null));
+    localStorage.removeItem("user");
   };
 
   return (
@@ -140,6 +147,7 @@ export default function Navbar() {
             ) : (
               <li role="none" className="flex items-stretch">
                 <button
+                  onClick={handleLogOut}
                   role="menuitem"
                   aria-haspopup="false"
                   className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"

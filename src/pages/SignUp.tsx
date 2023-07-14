@@ -8,8 +8,10 @@
 import { toast } from "react-hot-toast";
 import "../styles/autofill.css";
 import { useCreateUserMutation } from "../redux/api/apiSlice";
+import { useNavigate } from "react-router-dom";
 export default function SignUp() {
   const [createUser, { isLoading }] = useCreateUserMutation();
+  const navigate = useNavigate();
 
   console.log(isLoading);
 
@@ -41,6 +43,7 @@ export default function SignUp() {
 
       form.reset();
       toast.success("User created successfully");
+      navigate("/login");
     } catch (error) {
       toast.error("Failed to create user");
     }
