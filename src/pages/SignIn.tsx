@@ -1,14 +1,52 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { toast } from "react-hot-toast";
+import { useLoginUserMutation } from "../redux/api/apiSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { setUser } from "../redux/features/user/userSlice";
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 export default function SignIn() {
-  const handlelogin = (e: { preventDefault: () => void; target: any }) => {
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+  console.log(isLoading);
+
+  const dispatch = useAppDispatch();
+
+  const handlelogin = async (e: {
+    preventDefault: () => void;
+    target: any;
+  }) => {
     e.preventDefault();
 
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
 
-    console.log({ email, password });
+    // console.log({ email, password });
+    const option = {
+      email,
+      password,
+    };
+
+    try {
+      const response = await loginUser(option);
+
+      // console.log(response.data.data);
+
+      if ("error" in response) {
+        return toast.error("Failed to login");
+      }
+
+      dispatch(setUser(response.data.data.email));
+      localStorage.setItem("user", response.data.data.email);
+
+      form.reset();
+      toast.success("Logged in successfully");
+    } catch (error) {
+      toast.error("Failed to login");
+    }
   };
 
   return (

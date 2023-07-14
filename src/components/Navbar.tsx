@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { NavLink, useLocation, Link } from "react-router-dom";
 import logo from "../assets/Vector_Book_blue.svg.png";
+import { useAppSelector } from "../redux/hooks";
 
 export default function Navbar() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
+
+  const { user } = useAppSelector((state) => state.user);
+  const localuser = localStorage.getItem("user");
+
+  console.log(user);
 
   const location = useLocation();
 
@@ -100,32 +106,48 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            <li role="none" className="flex items-stretch">
-              <NavLink
-                to="/login"
-                style={
-                  isActiveNavLink("/login") ? activeNavLinkStyle : undefined
-                }
-                role="menuitem"
-                aria-haspopup="false"
-                className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
-              >
-                <span>Sign in</span>
-              </NavLink>
-            </li>
-            <li role="none" className="flex items-stretch">
-              <NavLink
-                to="/register"
-                style={
-                  isActiveNavLink("/register") ? activeNavLinkStyle : undefined
-                }
-                role="menuitem"
-                aria-haspopup="false"
-                className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
-              >
-                <span>Sign up</span>
-              </NavLink>
-            </li>
+            {!(user.email || localuser) ? (
+              <>
+                <li role="none" className="flex items-stretch">
+                  <NavLink
+                    to="/login"
+                    style={
+                      isActiveNavLink("/login") ? activeNavLinkStyle : undefined
+                    }
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  >
+                    <span>Sign in</span>
+                  </NavLink>
+                </li>
+                <li role="none" className="flex items-stretch">
+                  <NavLink
+                    to="/register"
+                    style={
+                      isActiveNavLink("/register")
+                        ? activeNavLinkStyle
+                        : undefined
+                    }
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  >
+                    <span>Sign up</span>
+                  </NavLink>
+                </li>
+              </>
+            ) : (
+              <li role="none" className="flex items-stretch">
+                <button
+                  role="menuitem"
+                  aria-haspopup="false"
+                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                >
+                  <span>Log Out</span>
+                </button>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

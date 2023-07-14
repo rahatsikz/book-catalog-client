@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -11,7 +13,10 @@ export default function SignUp() {
 
   console.log(isLoading);
 
-  const handleRegister = (e: { preventDefault: () => void; target: any }) => {
+  const handleRegister = async (e: {
+    preventDefault: () => void;
+    target: any;
+  }) => {
     e.preventDefault();
 
     const form = e.target;
@@ -27,12 +32,18 @@ export default function SignUp() {
       password,
     };
 
-    createUser(option);
-    form.reset();
+    try {
+      const response = await createUser(option);
 
-    toast.success("User Created Successfully");
+      if ("error" in response) {
+        return toast.error("Failed to create user");
+      }
 
-    // console.log({ email, password });
+      form.reset();
+      toast.success("User created successfully");
+    } catch (error) {
+      toast.error("Failed to create user");
+    }
   };
 
   return (
