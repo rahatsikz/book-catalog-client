@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { useGetAllBooksQuery } from "../redux/api/apiSlice";
+import { useGetLatestBooksQuery } from "../redux/api/apiSlice";
 import { IBook } from "../types/IBook";
 
 export default function TopBooks() {
-  const { data } = useGetAllBooksQuery(undefined);
+  const { data } = useGetLatestBooksQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   return (
     <div className="container mx-auto my-12">
