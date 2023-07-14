@@ -145,16 +145,33 @@ export default function Navbar() {
                 </li>
               </>
             ) : (
-              <li role="none" className="flex items-stretch">
-                <button
-                  onClick={handleLogOut}
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
-                >
-                  <span>Log Out</span>
-                </button>
-              </li>
+              <>
+                <li role="none" className="flex items-stretch">
+                  <NavLink
+                    to="/addnew"
+                    style={
+                      isActiveNavLink("/addnew")
+                        ? activeNavLinkStyle
+                        : undefined
+                    }
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  >
+                    <span>Add New Book</span>
+                  </NavLink>
+                </li>
+                <li role="none" className="flex items-stretch">
+                  <button
+                    onClick={handleLogOut}
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  >
+                    <span>Log Out</span>
+                  </button>
+                </li>
+              </>
             )}
           </ul>
         </nav>

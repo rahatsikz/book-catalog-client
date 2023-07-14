@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { useLoginUserMutation } from "../redux/api/apiSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { setUser } from "../redux/features/user/userSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 export default function SignIn() {
@@ -15,6 +15,8 @@ export default function SignIn() {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handlelogin = async (e: {
     preventDefault: () => void;
@@ -46,7 +48,7 @@ export default function SignIn() {
 
       form.reset();
       toast.success("Logged in successfully");
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (error) {
       toast.error("Failed to login");
     }
