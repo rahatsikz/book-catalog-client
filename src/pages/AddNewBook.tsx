@@ -1,13 +1,24 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
+import { toast } from "react-hot-toast";
+import { useAddBookMutation } from "../redux/api/apiSlice";
 import { useAppSelector } from "../redux/hooks";
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 export default function AddNewBook() {
   const { user } = useAppSelector((state) => state.user);
 
-  const handleAddBook = (e: { preventDefault: () => void; target: any }) => {
+  const [addBook, { isLoading }] = useAddBookMutation();
+
+  console.log({ isLoading });
+
+  const handleAddBook = async (e: {
+    preventDefault: () => void;
+    target: any;
+  }) => {
     e.preventDefault();
     const form = e.target;
 
@@ -27,6 +38,16 @@ export default function AddNewBook() {
     );
 
     console.log({ title, author, genre, formattedDate, user });
+
+    const option = {
+      title,
+      author,
+      genre,
+      publicationDate: formattedDate,
+      uploader: user.email,
+    };
+    await addBook(option);
+    toast.success("Book Added Successfully");
   };
 
   return (
@@ -34,7 +55,7 @@ export default function AddNewBook() {
       <p className="text-center text-xl font-semibold underline text-cyan-600 underline-offset-8 uppercase">
         Fill up the info to Add book
       </p>
-      <div className="mt-8 py-8 bg-slate-200">
+      <div className="mt-8 py-8 bg-slate-200 rounded-lg">
         <form onSubmit={handleAddBook}>
           <div className="grid lg:grid-cols-2 gap-8 w-9/12 mx-auto">
             <input

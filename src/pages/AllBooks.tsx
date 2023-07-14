@@ -10,7 +10,9 @@ import { IBook } from "../types/IBook";
 import { useState, useEffect } from "react";
 
 export default function AllBooks() {
-  const { data, isLoading } = useGetAllBooksQuery(undefined);
+  const { data, isLoading } = useGetAllBooksQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   console.log(isLoading);
 
   let [filteredData, setFilteredData] = useState<IBook[] | undefined>(
