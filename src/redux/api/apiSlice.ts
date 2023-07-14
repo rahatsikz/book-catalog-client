@@ -5,6 +5,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api/v1" }),
+  tagTypes: ["Comments"],
   endpoints: (builder) => ({
     createUser: builder.mutation({
       query: (loginData) => ({
@@ -22,12 +23,14 @@ export const api = createApi({
     }),
     getAllBooks: builder.query({
       query: () => "/books",
+      providesTags: ["Comments"],
     }),
     getLatestBooks: builder.query({
       query: () => "/books/latest",
     }),
     getSingleBook: builder.query({
       query: (id) => `/books/${id}`,
+      providesTags: ["Comments"],
     }),
     addBook: builder.mutation({
       query: (bookInfo) => ({
@@ -43,6 +46,7 @@ export const api = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Comments"],
     }),
   }),
 });

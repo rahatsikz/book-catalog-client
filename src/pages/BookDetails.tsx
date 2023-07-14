@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -8,15 +9,23 @@ import {
   useGetSingleBookQuery,
 } from "../redux/api/apiSlice";
 import { toast } from "react-hot-toast";
+import { FaUserAlt } from "react-icons/fa";
 import cardIMG from "../assets/pexels-oziel-2846814.jpg";
+import Loader from "../components/Loader";
+import { useAppSelector } from "../redux/hooks";
 
 export default function BookDetails() {
   const { id } = useParams();
-  const { data } = useGetSingleBookQuery(id);
+  const { data, isLoading } = useGetSingleBookQuery(id);
 
-  const [addComment, { isLoading }] = useAddCommentMutation();
+  const [addComment] = useAddCommentMutation();
+  const { user } = useAppSelector((state) => state.user);
 
-  console.log(isLoading);
+  //   console.log(isLoading);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const handleComment = async (e: {
     preventDefault: () => void;
@@ -36,6 +45,7 @@ export default function BookDetails() {
     };
     await addComment(option);
     toast.success("Comment Added Successfully");
+    form.reset();
   };
 
   return (
@@ -67,6 +77,19 @@ export default function BookDetails() {
               Plan To Read
             </button>
           </div>
+
+          <div>
+            {data?.data?.uploader === user.email && (
+              <div className="mt-4 flex gap-4">
+                <button className="btn bg-cyan-500 px-10 text-white hover:bg-cyan-600">
+                  Edit
+                </button>
+                <button className="btn bg-transparent px-8 border-red-500 text-red-500">
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -85,6 +108,16 @@ export default function BookDetails() {
           </label>
         </div>
       </form>
+
+      <div className="mt-8">
+        <p className="text-lg text-cyan-500">Comments</p>
+        {data?.data?.comments.map((comment: string) => (
+          <div className="flex items-center gap-4 mt-4">
+            <FaUserAlt />
+            <p>{comment}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
