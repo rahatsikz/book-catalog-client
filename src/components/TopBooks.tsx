@@ -1,16 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { useGetAllBooksQuery } from "../redux/api/apiSlice";
+import { IBook } from "../types/IBook";
+
 export default function TopBooks() {
-  const bookNames = [
-    "To Kill a Mockingbird",
-    "1984",
-    "Pride and Prejudice",
-    "The Great Gatsby",
-    "The Lord of the Rings",
-    "Harry Potter and the Sorcerer's Stone",
-    "The Catcher in the Rye",
-    "Moby-Dick",
-    "The Chronicles of Narnia",
-    "The Da Vinci Code",
-  ];
+  const { data } = useGetAllBooksQuery(undefined);
 
   return (
     <div className="container mx-auto my-12">
@@ -18,10 +13,10 @@ export default function TopBooks() {
         Here are the latest top books
       </p>
 
-      <div className="grid lg:grid-cols-3 gap-6 mt-12">
-        {bookNames.map((book, idx) => (
-          <p key={idx} className="text-lg font-semibold">
-            {book}
+      <div className="grid lg:grid-cols-3 gap-6 mt-12 text-center">
+        {data?.data.map((book: IBook) => (
+          <p key={book._id} className="text-lg font-semibold">
+            {book.title}
           </p>
         ))}
       </div>

@@ -19,7 +19,14 @@ export const api = createApi({
         body: loginData,
       }),
     }),
+    getAllBooks: builder.query({
+      query: () => "/books",
+    }),
   }),
 });
 
-export const { useCreateUserMutation, useLoginUserMutation } = api;
+export const {
+  useCreateUserMutation,
+  useLoginUserMutation,
+  useGetAllBooksQuery,
+} = api;
