@@ -132,7 +132,7 @@ export default function AllBooks() {
   // setFilteredData(filteredData);
 
   return (
-    <div className="w-8/12 mx-auto mt-12">
+    <div className="w-8/12 mx-auto my-12">
       <p className="text-center text-xl font-semibold underline text-cyan-600 underline-offset-8 uppercase">
         List of all books
       </p>
