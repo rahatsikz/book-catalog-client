@@ -48,6 +48,23 @@ export const api = createApi({
       }),
       invalidatesTags: ["Comments"],
     }),
+
+    editBook: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/books/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Comments"],
+    }),
+
+    deleteBook: builder.mutation({
+      query: (id) => ({
+        url: `/books/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Comments"],
+    }),
   }),
 });
 
@@ -59,4 +76,6 @@ export const {
   useGetLatestBooksQuery,
   useGetSingleBookQuery,
   useAddCommentMutation,
+  useEditBookMutation,
+  useDeleteBookMutation,
 } = api;
