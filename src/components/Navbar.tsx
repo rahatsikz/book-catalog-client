@@ -162,6 +162,21 @@ export default function Navbar() {
                   </NavLink>
                 </li>
                 <li role="none" className="flex items-stretch">
+                  <NavLink
+                    to="/wishlist"
+                    style={
+                      isActiveNavLink("/wishlist")
+                        ? activeNavLinkStyle
+                        : undefined
+                    }
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-cyan-500 focus:bg-cyan-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  >
+                    <span>Wishlist</span>
+                  </NavLink>
+                </li>
+                <li role="none" className="flex items-stretch">
                   <button
                     onClick={handleLogOut}
                     role="menuitem"
