@@ -30,6 +30,24 @@ export const api = createApi({
       invalidatesTags: ["User"],
     }),
 
+    addToReadList: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/users/readlist/${id}`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    updateReadlist: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/users/readlist/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
     getSingleUser: builder.query({
       query: (id) => `/users/${id}`,
       providesTags: ["User"],
@@ -94,4 +112,6 @@ export const {
   useDeleteBookMutation,
   useAddToWishlistMutation,
   useGetSingleUserQuery,
+  useAddToReadListMutation,
+  useUpdateReadlistMutation
 } = api;
