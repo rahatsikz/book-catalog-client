@@ -7,8 +7,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useAddCommentMutation,
+  useAddToWishlistMutation,
   useDeleteBookMutation,
   useGetSingleBookQuery,
+  useGetSingleUserQuery,
 } from "../redux/api/apiSlice";
 import { toast } from "react-hot-toast";
 import { FaUserAlt } from "react-icons/fa";
@@ -23,6 +25,9 @@ export default function BookDetails() {
   const [addComment] = useAddCommentMutation();
   const [deleteBook] = useDeleteBookMutation();
   const { user } = useAppSelector((state) => state.user);
+
+  const { data: webUser } = useGetSingleUserQuery(user.id);
+  const [addToWishlist] = useAddToWishlistMutation();
 
   const navigate = useNavigate();
 
@@ -66,6 +71,20 @@ export default function BookDetails() {
     }
   };
 
+  const handleWishlist = async () => {
+    const book = data?.data?.title;
+
+    const option = {
+      id: user.id,
+      data: {
+        book,
+      },
+    };
+
+    await addToWishlist(option);
+    toast.success("Added to Wishlist Successfully");
+  };
+
   return (
     <div className="w-9/12 mx-auto my-12">
       <p className="text-center text-xl font-semibold underline text-cyan-600 underline-offset-8 uppercase">
@@ -88,7 +107,13 @@ export default function BookDetails() {
             <span className="text-cyan-500">{data?.data?.publicationDate}</span>
           </p>
           <div className="card-action mt-4 flex gap-4">
-            <button className="btn bg-cyan-500 text-white hover:bg-cyan-600">
+            <button
+              onClick={handleWishlist}
+              className={`${
+                webUser?.data?.wishlist.includes(data?.data?.title) &&
+                `btn-disabled`
+              } btn bg-cyan-500 text-white hover:bg-cyan-600`}
+            >
               Wishlist
             </button>
             <button className="btn bg-transparent border-cyan-500 text-cyan-500">

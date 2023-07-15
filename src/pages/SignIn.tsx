@@ -5,7 +5,7 @@
 import { toast } from "react-hot-toast";
 import { useLoginUserMutation } from "../redux/api/apiSlice";
 import { useAppDispatch } from "../redux/hooks";
-import { setUser } from "../redux/features/user/userSlice";
+import { setID, setUser } from "../redux/features/user/userSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -44,7 +44,11 @@ export default function SignIn() {
       }
 
       dispatch(setUser(response.data.data.email));
+      dispatch(setID(response.data.data._id));
+      // console.log(response.data.data._id);
+
       localStorage.setItem("user", response.data.data.email);
+      localStorage.setItem("userID", response.data.data._id);
 
       form.reset();
       toast.success("Logged in successfully");
