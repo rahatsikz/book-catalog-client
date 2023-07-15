@@ -5,20 +5,22 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useAddCommentMutation,
-  useAddToReadListMutation,
-  useAddToWishlistMutation,
-  useDeleteBookMutation,
-  useGetSingleBookQuery,
-  useGetSingleUserQuery,
-} from "../redux/api/apiSlice";
 import { toast } from "react-hot-toast";
 import { FaUserAlt } from "react-icons/fa";
 import cardIMG from "../assets/pexels-oziel-2846814.jpg";
 import Loader from "../components/Loader";
 import { useAppSelector } from "../redux/hooks";
 import { IReadList } from "../types/IReadList";
+import {
+  useAddCommentMutation,
+  useDeleteBookMutation,
+  useGetSingleBookQuery,
+} from "../redux/features/book/bookApi";
+import {
+  useAddToReadListMutation,
+  useAddToWishlistMutation,
+  useGetSingleUserQuery,
+} from "../redux/features/user/userApi";
 
 export default function BookDetails() {
   const { id } = useParams();

@@ -3,10 +3,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { toast } from "react-hot-toast";
-import { useLoginUserMutation } from "../redux/api/apiSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { setID, setUser } from "../redux/features/user/userSlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../redux/features/user/userApi";
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 export default function SignIn() {

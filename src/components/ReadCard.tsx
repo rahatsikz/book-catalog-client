@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { FaBook } from "react-icons/fa";
 import { IList } from "../types/IList";
-import { useUpdateReadlistMutation } from "../redux/api/apiSlice";
 import { useAppSelector } from "../redux/hooks";
 import { toast } from "react-hot-toast";
+import { useUpdateReadlistMutation } from "../redux/features/user/userApi";
 
 export default function ReadCard({ list }: IList) {
   const [updateReadlist] = useUpdateReadlistMutation();
@@ -54,11 +54,11 @@ export default function ReadCard({ list }: IList) {
             <div>
               <input
                 type="checkbox"
-                id="status"
+                id={list._id}
                 name="status"
                 onChange={handleComplete}
               />
-              <label htmlFor="status"> Complete</label>
+              <label htmlFor={list._id}> Complete</label>
             </div>
           </div>
         )}

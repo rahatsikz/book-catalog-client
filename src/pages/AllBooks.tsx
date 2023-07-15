@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import Loader from "../components/Loader";
 import TableRow from "../components/TableRow";
-import { useGetAllBooksQuery } from "../redux/api/apiSlice";
+import { useGetAllBooksQuery } from "../redux/features/book/bookApi";
 import { IBook } from "../types/IBook";
 import { useState, useEffect } from "react";
 
@@ -13,7 +15,7 @@ export default function AllBooks() {
   const { data, isLoading } = useGetAllBooksQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-  console.log(isLoading);
+  // console.log(isLoading);
 
   let [filteredData, setFilteredData] = useState<IBook[] | undefined>(
     data?.data
@@ -26,6 +28,10 @@ export default function AllBooks() {
   useEffect(() => {
     setFilteredData(data?.data);
   }, [data?.data]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const handleSearch = (e: {
     preventDefault: () => void;

@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useGetSingleUserQuery } from "../redux/api/apiSlice";
 import { useAppSelector } from "../redux/hooks";
 import { IReadList } from "../types/IReadList";
 import ReadCard from "../components/ReadCard";
+import { useGetSingleUserQuery } from "../redux/features/user/userApi";
+import Loader from "../components/Loader";
 
 export default function ReadingList() {
   const { user } = useAppSelector((state) => state.user);
 
-  const { data } = useGetSingleUserQuery(user.id);
+  const { data, isLoading } = useGetSingleUserQuery(user.id);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (data?.data?.readList.length < 1) {
     return (
@@ -20,7 +25,7 @@ export default function ReadingList() {
   }
 
   return (
-    <section className="container mx-auto mt-12">
+    <section className="container mx-auto my-12">
       <p className="text-center text-xl font-semibold underline text-cyan-600 underline-offset-8 uppercase">
         Here are your book from Reading List
       </p>
